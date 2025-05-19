@@ -1,13 +1,18 @@
-def edit_time_by_start_lesson(interval: list[int], start_lesson: int) -> list[int]:
-    cut: int = 0
-    for index in range(0, len(interval), 2):
-        if interval[index] <= start_lesson:
-            interval[index] = start_lesson
-            cut = index
-        else:
-            interval = interval[cut:]
+def edit_intervals_by_lesson(intervals: list[int], start_lesson: int, end_lesson: int) -> list[int]:
+    edit_intervals: list[int] = []
+    for index in range(0, len(intervals), 2):
+        start_session: int = intervals[index]
+        end_session: int = intervals[index + 1]
+        if start_session >= start_lesson and end_session <= end_lesson:
+            edit_intervals.extend(intervals[index:index + 2])
+        elif start_session < start_lesson and end_session <= end_lesson:
+            edit_intervals.append(start_lesson)
+            edit_intervals.append(end_session)
+        elif start_session >= start_lesson and end_session > end_lesson:
+            edit_intervals.append(start_session)
+            edit_intervals.append(end_lesson)
             break
-    return interval
+    return edit_intervals
 
 
 def edit_time_by_end_lesson(interval: list[int], end_lesson: int) -> list[int]:
