@@ -31,20 +31,23 @@ def edit_intervals_by_intersection_session(intervals: list[int]) -> list[int]:
     return edit_intervals
 
 
-
-def get_intersection(time_pupil: list[int], time_tutor: list[int]) -> int:
+def get_intersection(intervals_pupil: list[int], intervals_tutor: list[int]) -> int:
     intersection: list[int] = []
     cut_tutor: int = 0
-    for index_pupil in range(0, len(time_pupil), 2):
-        for index_tutor in range(cut_tutor, len(time_tutor), 2):
-            if time_tutor[index_tutor] > time_pupil[index_pupil + 1]:
+    for index_pupil in range(0, len(intervals_pupil), 2):
+        start_session_pupil: int = intervals_pupil[index_pupil]
+        end_session_pupil: int = intervals_pupil[index_pupil + 1]
+        for index_tutor in range(cut_tutor, len(intervals_tutor), 2):
+            start_session_tutor: int = intervals_tutor[index_tutor]
+            end_session_tutor: int = intervals_tutor[index_tutor + 1]
+            if start_session_tutor > end_session_pupil:
                 break
-            if time_tutor[index_tutor + 1] < time_pupil[index_pupil]:
+            if end_session_tutor < start_session_pupil:
                 cut_tutor += 2
                 continue
             intersection.append(
-                min(time_tutor[index_tutor + 1], time_pupil[index_pupil + 1]) -
-                max(time_tutor[index_tutor], time_pupil[index_pupil]))
+                min(end_session_tutor, end_session_pupil) -
+                max(start_session_tutor, start_session_pupil))
     return sum(intersection)
 
 
