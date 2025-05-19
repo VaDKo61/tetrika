@@ -52,8 +52,9 @@ def appearance(intervals: dict[str, list[int]]) -> int | None:
     time_lesson: list[int] = intervals.pop('lesson')
     start_lesson: int = time_lesson[0]
     end_lesson: int = time_lesson[1]
-    for key in intervals:
-        intervals[key] = edit_time_by_start_lesson(intervals[key], start_lesson)
-        intervals[key] = edit_time_by_end_lesson(intervals[key], end_lesson)
-    edit_time_by_intersection_session(intervals)
+    for interval in intervals:
+        intervals[interval] = edit_intervals_by_lesson(intervals[interval], start_lesson, end_lesson)
+        intervals[interval] = edit_intervals_by_intersection_session(intervals[interval])
+        if len(intervals[interval]) == 0:
+            return None
     return get_intersection(intervals['pupil'], intervals['tutor'])
