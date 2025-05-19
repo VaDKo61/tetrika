@@ -15,17 +15,20 @@ def edit_intervals_by_lesson(intervals: list[int], start_lesson: int, end_lesson
     return edit_intervals
 
 
-def edit_time_by_end_lesson(interval: list[int], end_lesson: int) -> list[int]:
-    cut: int = -1
-    for index in range(-1, -len(interval), -2):
-        if interval[index] >= end_lesson:
-            interval[index] = end_lesson
-            cut = index
+def edit_intervals_by_intersection_session(intervals: list[int]) -> list[int]:
+    edit_intervals: list[int] = intervals[0:2]
+    for index in range(2, len(intervals), 2):
+        start_session: int = intervals[index]
+        end_session: int = intervals[index + 1]
+        end_long_session: int = edit_intervals[-1]
+        if start_session > end_long_session:
+            edit_intervals.extend(intervals[index:index + 2])
+        elif start_session < end_long_session > end_session:
+            continue
         else:
-            interval = interval[:] if cut == -1 else interval[:cut + 1]
-            break
-    return interval
-
+            edit_intervals.append(end_long_session)
+            edit_intervals.append(end_session)
+    return edit_intervals
 
 def edit_time_by_intersection_session(intervals: dict[str, list[int]]) -> None:
     for interval in intervals.values():
