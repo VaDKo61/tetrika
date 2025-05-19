@@ -30,11 +30,6 @@ def edit_intervals_by_intersection_session(intervals: list[int]) -> list[int]:
             edit_intervals.append(end_session)
     return edit_intervals
 
-def edit_time_by_intersection_session(intervals: dict[str, list[int]]) -> None:
-    for interval in intervals.values():
-        for index in range(1, len(interval) - 1, 2):
-            if interval[index] > interval[index + 1]:
-                interval[index] = interval[index + 1] - 1
 
 
 def get_intersection(time_pupil: list[int], time_tutor: list[int]) -> int:
