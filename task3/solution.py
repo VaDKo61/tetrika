@@ -1,4 +1,4 @@
-def edit_time_by_start(interval: list[int], start_lesson: int) -> list[int]:
+def edit_time_by_start_lesson(interval: list[int], start_lesson: int) -> list[int]:
     cut: int = 0
     for index in range(0, len(interval), 2):
         if interval[index] <= start_lesson:
@@ -10,7 +10,7 @@ def edit_time_by_start(interval: list[int], start_lesson: int) -> list[int]:
     return interval
 
 
-def edit_time_by_end(interval: list[int], end_lesson: int) -> list[int]:
+def edit_time_by_end_lesson(interval: list[int], end_lesson: int) -> list[int]:
     cut: int = -1
     for index in range(-1, -len(interval), -2):
         if interval[index] >= end_lesson:
@@ -20,15 +20,6 @@ def edit_time_by_end(interval: list[int], end_lesson: int) -> list[int]:
             interval = interval[:] if cut == -1 else interval[:cut + 1]
             break
     return interval
-
-
-def edit_time_by_lesson(intervals: dict[str, list[int]]) -> None:
-    time_lesson: list[int] = intervals.pop('lesson')
-    start_lesson: int = time_lesson[0]
-    end_lesson: int = time_lesson[1]
-    for key in intervals:
-        intervals[key] = edit_time_by_start(intervals[key], start_lesson)
-        intervals[key] = edit_time_by_end(intervals[key], end_lesson)
 
 
 def edit_time_by_intersection_session(intervals: dict[str, list[int]]) -> None:
@@ -58,6 +49,11 @@ def appearance(intervals: dict[str, list[int]]) -> int | None:
     for interval in intervals.values():
         if len(interval) == 0:
             return None
-    edit_time_by_lesson(intervals)
+    time_lesson: list[int] = intervals.pop('lesson')
+    start_lesson: int = time_lesson[0]
+    end_lesson: int = time_lesson[1]
+    for key in intervals:
+        intervals[key] = edit_time_by_start_lesson(intervals[key], start_lesson)
+        intervals[key] = edit_time_by_end_lesson(intervals[key], end_lesson)
     edit_time_by_intersection_session(intervals)
     return get_intersection(intervals['pupil'], intervals['tutor'])
